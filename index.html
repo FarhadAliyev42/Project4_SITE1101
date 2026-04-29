@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Portfolio</title>
+  <title>Farhad Aliyev - Portfolio</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
@@ -12,11 +12,11 @@
   <!-- Navigation -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo">Portfolio</a>
+      <a href="#home" class="nav-logo">Portfolio</a>
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="projects.html">Projects</a></li>
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
       </ul>
       <button class="nav-toggle" aria-label="Toggle navigation">
         <span></span><span></span><span></span>
@@ -24,10 +24,27 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="hero">
+  <!-- Home Section -->
+  <section id="home" class="hero">
     <div class="hero-content">
       <div class="hero-image-wrapper">
+        <img src="images/profile.jpg" alt="Profile photo" class="profile-photo" />
+      </div>
+      <div class="hero-text">
+        <h1 class="hero-name">Farhad Aliyev</h1>
+        <p class="hero-tagline">Student &bull; Programmer &bull; Physics Enthusiast</p>
+        <p class="hero-bio">
+          Hi, I'm Farhad — a Computer Science student at ADA University, set to graduate in 2027. 
+          I have a passion for programming contests and enjoy diving deep into math and physics through self-study. 
+          I work with C/C++, Python, and Arduinos, and I'm more interested in academia and physics than the typical "career" path.
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">View My Work</a>
+          <a href="#about" class="btn btn-secondary">About Me</a>
+        </div>
+      </div>
+    </div>
+  </section>
         <img src="images/profile.jpg" alt="Profile photo" class="profile-photo" />
       </div>
       <div class="hero-text">
