@@ -1,3 +1,63 @@
+// ── Typewriter effect on hero tagline ──
+window.addEventListener('DOMContentLoaded', function () {
+  const tagline = document.querySelector('.hero-tagline');
+  if (tagline) {
+    const fullText = tagline.textContent.trim();
+    tagline.textContent = '';
+    tagline.classList.add('typing');
+    let i = 0;
+    function typeChar() {
+      if (i < fullText.length) {
+        tagline.textContent += fullText[i++];
+        setTimeout(typeChar, 52);
+      } else {
+        setTimeout(() => tagline.classList.remove('typing'), 1400);
+      }
+    }
+    setTimeout(typeChar, 600);
+  }
+
+  // ── Animated counters for hero stats ──
+  function animateCounter(el, target, suffix) {
+    let current = 0;
+    const step = Math.ceil(target / 30);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current + (suffix || '');
+      if (current >= target) clearInterval(timer);
+    }, 35);
+  }
+
+  document.querySelectorAll('.stat-number').forEach(el => {
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || '';
+    el.textContent = '0' + suffix;
+    setTimeout(() => animateCounter(el, target, suffix), 900);
+  });
+
+  // ── Scroll-reveal for cards ──
+  const revealTargets = document.querySelectorAll(
+    '.about-card, .project-card, .homework-card'
+  );
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealTargets.forEach((el, i) => {
+      el.classList.add('reveal-ready');
+      el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+      observer.observe(el);
+    });
+  }
+});
+
 // Mobile navigation toggle
 const toggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
@@ -12,7 +72,27 @@ navLinks.querySelectorAll('a').forEach(link => {
     navLinks.classList.remove('open');
   });
 });
-
+// Highlight active nav link on scroll
+window.addEventListener('scroll', function() {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.clientHeight;
+    if (scrollY >= sectionTop - 200) {
+      current = section.getAttribute('id');
+    }
+  });
+  
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+});
 // Animate modal close
 function closeModalWithAnimation(projectId) {
   const modal = document.getElementById(projectId + '-modal');
