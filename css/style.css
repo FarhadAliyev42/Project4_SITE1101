@@ -1049,7 +1049,7 @@ a {
   }
   
   .modal-body {
-    padding: 20px 24px 24px;
+    padding: 20px 0 24px;
   }
   
   .modal-title {
@@ -1289,6 +1289,11 @@ a {
   to { transform: translateY(0); opacity: 1; }
 }
 
+@keyframes slideOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-20px); opacity: 0; }
+}
+
 .modal-close {
   color: var(--color-text-muted);
   float: right;
@@ -1300,7 +1305,7 @@ a {
 }
 
 .modal-close:hover {
-  color: var(--color-accent);
+  color: #fff;
 }
 
 .modal-title {
@@ -1312,7 +1317,7 @@ a {
 }
 
 .modal-body {
-  padding: 0 32px 32px;
+  padding: 0 0 32px;
 }
 
 .modal-section {
@@ -1461,7 +1466,7 @@ a {
   }
 
   .modal-body {
-    padding: 0 20px 24px;
+    padding: 0 0 24px;
   }
 
   .team-table th,
@@ -1706,6 +1711,28 @@ a {
 
 .homework-card:hover::before {
   transform: scaleX(1);
+}
+
+/* ── Project Report Section ── */
+.report-description {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.report-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.report-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  padding: 10px 20px;
 }
 
 /* ── Gallery Grid ── */
