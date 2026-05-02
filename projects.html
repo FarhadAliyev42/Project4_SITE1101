@@ -104,7 +104,7 @@
       <div class="homework-grid">
 
         <!-- JavaScript Course -->
-        <div class="homework-card">
+        <div class="homework-card" onclick="openModal('homework-js')" style="cursor:pointer;">
           <div class="homework-icon">
             <i class="fab fa-js"></i>
           </div>
@@ -114,13 +114,18 @@
             <p><strong>Student ID:</strong> 17508</p>
             <p><strong>CRN:</strong> 20568</p>
           </div>
-          <a href="Files/JavaScriptCourse - Info Systems .pdf" target="_blank" class="btn btn-secondary">
-            <i class="fas fa-download"></i> View Report
-          </a>
+          <div class="homework-actions" onclick="event.stopPropagation()">
+            <a href="Files/JavaScriptCourse - Info Systems .pdf" target="_blank" class="btn btn-secondary">
+              <i class="fas fa-file-pdf"></i> View Report
+            </a>
+            <a href="https://www.codecademy.com/learn/introduction-to-javascript" target="_blank" class="btn btn-primary">
+              <i class="fas fa-external-link-alt"></i> Link to Course
+            </a>
+          </div>
         </div>
 
         <!-- SQL Course -->
-        <div class="homework-card">
+        <div class="homework-card" onclick="openModal('homework-sql')" style="cursor:pointer;">
           <div class="homework-icon">
             <i class="fas fa-database"></i>
           </div>
@@ -130,9 +135,14 @@
             <p><strong>Student ID:</strong> 17508</p>
             <p><strong>CRN:</strong> 20568</p>
           </div>
-          <a href="Files/SQLCourse - Info Systems.pdf" target="_blank" class="btn btn-secondary">
-            <i class="fas fa-download"></i> View Report
-          </a>
+          <div class="homework-actions" onclick="event.stopPropagation()">
+            <a href="Files/SQLCourse - Info Systems.pdf" target="_blank" class="btn btn-secondary">
+              <i class="fas fa-file-pdf"></i> View Report
+            </a>
+            <a href="https://www.codecademy.com/learn/learn-sql" target="_blank" class="btn btn-primary">
+              <i class="fas fa-external-link-alt"></i> Link to Course
+            </a>
+          </div>
         </div>
 
       </div>
@@ -145,7 +155,87 @@
   </footer>
 
   <!-- Modals -->
-  
+
+  <!-- Homework JS Modal -->
+  <div id="homework-js-modal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('homework-js')">&times;</span>
+      <h2 class="modal-title">JavaScript Course</h2>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h3><i class="fab fa-js"></i> Course Info</h3>
+          <p><strong>Platform:</strong> Codecademy</p>
+          <p><strong>Course:</strong> Introduction to JavaScript</p>
+          <p><strong>Student ID:</strong> 17508 &nbsp;|&nbsp; <strong>CRN:</strong> 20568</p>
+        </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-info-circle"></i> About This Course</h3>
+          <p>This course covered the fundamentals of JavaScript — the core language of the web. Through interactive lessons and projects on Codecademy, I gained hands-on experience with the building blocks of modern programming.</p>
+        </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-tasks"></i> Topics Covered</h3>
+          <ul class="work-list">
+            <li>Variables, data types, and operators</li>
+            <li>Conditional statements and control flow</li>
+            <li>Functions and scope</li>
+            <li>Arrays and iteration methods</li>
+            <li>Objects and classes</li>
+            <li>Modules and error handling</li>
+          </ul>
+        </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-file-alt"></i> Report</h3>
+          <a href="Files/JavaScriptCourse - Info Systems .pdf" target="_blank" class="btn btn-secondary">
+            <i class="fas fa-file-pdf"></i> View Report
+          </a>
+          <a href="https://www.codecademy.com/learn/introduction-to-javascript" target="_blank" class="btn btn-primary" style="margin-left:12px;">
+            <i class="fas fa-external-link-alt"></i> Link to Course
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Homework SQL Modal -->
+  <div id="homework-sql-modal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('homework-sql')">&times;</span>
+      <h2 class="modal-title">SQL Course</h2>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h3><i class="fas fa-database"></i> Course Info</h3>
+          <p><strong>Platform:</strong> Codecademy</p>
+          <p><strong>Course:</strong> Learn SQL</p>
+          <p><strong>Student ID:</strong> 17508 &nbsp;|&nbsp; <strong>CRN:</strong> 20568</p>
+        </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-info-circle"></i> About This Course</h3>
+          <p>This course introduced Structured Query Language (SQL) for managing and querying relational databases. I learned how to interact with databases, retrieve and manipulate data, and design efficient queries using industry-standard syntax.</p>
+        </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-tasks"></i> Topics Covered</h3>
+          <ul class="work-list">
+            <li>SELECT statements and filtering with WHERE</li>
+            <li>Aggregate functions: COUNT, SUM, AVG, MIN, MAX</li>
+            <li>Grouping data with GROUP BY and HAVING</li>
+            <li>Joining tables: INNER JOIN, LEFT JOIN, CROSS JOIN</li>
+            <li>Subqueries and set operations (UNION, INTERSECT)</li>
+            <li>Creating and modifying tables with DDL commands</li>
+          </ul>
+        </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-file-alt"></i> Report</h3>
+          <a href="Files/SQLCourse - Info Systems.pdf" target="_blank" class="btn btn-secondary">
+            <i class="fas fa-file-pdf"></i> View Report
+          </a>
+          <a href="https://www.codecademy.com/learn/learn-sql" target="_blank" class="btn btn-primary" style="margin-left:12px;">
+            <i class="fas fa-external-link-alt"></i> Link to Course
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Project 1 Modal -->
   <div id="project1-modal" class="modal">
     <div class="modal-content">
@@ -203,6 +293,27 @@
           <p><strong>NAND Gate:</strong> Team 9</p>
           <p><strong>XOR Gate:</strong> Team 7, Team 8, Team 9</p>
         </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-images"></i> Gallery</h3>
+          <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project1/photo1.jpeg" alt="Project 1 photo 1" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project1/photo2.jpeg" alt="Project 1 photo 2" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project1/photo3.jpeg" alt="Project 1 photo 3" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project1/photo4.jpeg" alt="Project 1 photo 4" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -246,6 +357,91 @@
           <a href="https://dai.ly/xa1znze" target="_blank" class="video-link" style="background: #00b4d8; margin-left: 12px;">
             <i class="fas fa-video"></i> Alternative (Dailymotion)
           </a>
+        </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-images"></i> Gallery</h3>
+          <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo1.jpeg" alt="Project 2 photo 1" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo2.jpeg" alt="Project 2 photo 2" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo3.jpeg" alt="Project 2 photo 3" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo4.jpeg" alt="Project 2 photo 4" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo5.jpeg" alt="Project 2 photo 5" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo6.jpeg" alt="Project 2 photo 6" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo7.jpeg" alt="Project 2 photo 7" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo8.jpeg" alt="Project 2 photo 8" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo9.jpeg" alt="Project 2 photo 9" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo10.jpeg" alt="Project 2 photo 10" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo11.jpeg" alt="Project 2 photo 11" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo12.jpeg" alt="Project 2 photo 12" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo13.jpeg" alt="Project 2 photo 13" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo14.jpeg" alt="Project 2 photo 14" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo15.jpeg" alt="Project 2 photo 15" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo16.jpeg" alt="Project 2 photo 16" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo17.jpeg" alt="Project 2 photo 17" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo18.jpeg" alt="Project 2 photo 18" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo19.jpeg" alt="Project 2 photo 19" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project2/photo20.jpeg" alt="Project 2 photo 20" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -300,8 +496,38 @@ for (let i = 0; i < 36; i++) {
             <i class="fas fa-play-circle"></i> Watch on YouTube
           </a>
         </div>
+        <div class="modal-section">
+          <h3><i class="fas fa-images"></i> Gallery</h3>
+          <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project3/photo1.jpeg" alt="Project 3 photo 1" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project3/photo2.jpeg" alt="Project 3 photo 2" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project3/photo3.jpeg" alt="Project 3 photo 3" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+              <img src="images/project3/photo4.jpeg" alt="Project 3 photo 4" loading="lazy" onerror="galleryItemError(this)">
+              <div class="gallery-overlay"><i class="fas fa-expand-alt"></i></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+    <button class="lightbox-prev" onclick="event.stopPropagation(); changeLightbox(-1)"><i class="fas fa-chevron-left"></i></button>
+    <img id="lightbox-img" class="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+    <button class="lightbox-next" onclick="event.stopPropagation(); changeLightbox(1)"><i class="fas fa-chevron-right"></i></button>
+    <div id="lightbox-counter" class="lightbox-counter"></div>
   </div>
 
   <script src="js/main.js"></script>
@@ -333,213 +559,4 @@ for (let i = 0; i < 36; i++) {
   </script>
 </body>
 </html>
-
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-logo">Portfolio</a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="projects.html" class="active">Projects</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Projects Hero -->
-  <section class="hero projects-hero">
-    <div class="hero-content">
-      <div class="hero-text">
-        <h1 class="hero-name">My Projects & Homeworks</h1>
-        <p class="hero-tagline">Coursework &bull; Assignments &bull; Labs</p>
-        <p class="hero-bio">
-          A collection of all the projects and homeworks I've completed throughout my studies.
-          Click on any card to see detailed information including team members, descriptions, and demo videos.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Homeworks Section -->
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">
-        <i class="fas fa-book"></i> Homeworks
-      </h2>
-      <p class="section-subtitle">Individual assignments and coursework</p>
-      <div class="card-grid">
-        
-        <!-- Homework Card 1 -->
-        <div class="project-card" data-project="hw1">
-          <div class="card-icon">
-            <i class="fas fa-calculator"></i>
-          </div>
-          <h3 class="card-title">Homework 1</h3>
-          <p class="card-subtitle">Introduction to Information Systems</p>
-          <p class="card-text">Basic concepts and fundamentals of information systems.</p>
-          <span class="card-tag">Individual</span>
-        </div>
-
-        <!-- Homework Card 2 -->
-        <div class="project-card" data-project="hw2">
-          <div class="card-icon">
-            <i class="fas fa-database"></i>
-          </div>
-          <h3 class="card-title">Homework 2</h3>
-          <p class="card-subtitle">Data Management</p>
-          <p class="card-text">Database design and data management principles.</p>
-          <span class="card-tag">Individual</span>
-        </div>
-
-        <!-- Homework Card 3 -->
-        <div class="project-card" data-project="hw3">
-          <div class="card-icon">
-            <i class="fas fa-network-wired"></i>
-          </div>
-          <h3 class="card-title">Homework 3</h3>
-          <p class="card-subtitle">System Analysis</p>
-          <p class="card-text">Analysis of information systems and business processes.</p>
-          <span class="card-tag">Individual</span>
-        </div>
-
-        <!-- Homework Card 4 -->
-        <div class="project-card" data-project="hw4">
-          <div class="card-icon">
-            <i class="fas fa-project-diagram"></i>
-          </div>
-          <h3 class="card-title">Homework 4</h3>
-          <p class="card-subtitle">System Design</p>
-          <p class="card-text">Designing and modeling information systems.</p>
-          <span class="card-tag">Individual</span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Projects Section -->
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">
-        <i class="fas fa-code"></i> Projects
-      </h2>
-      <p class="section-subtitle">Group projects and major assignments</p>
-      <div class="card-grid">
-        
-        <!-- Project Card 1 -->
-        <div class="project-card" data-project="proj1">
-          <div class="card-icon">
-            <i class="fas fa-laptop-code"></i>
-          </div>
-          <h3 class="card-title">Project 1</h3>
-          <p class="card-subtitle">Web Development Project</p>
-          <p class="card-text">Building a responsive website with modern technologies.</p>
-          <span class="card-tag">Group</span>
-        </div>
-
-        <!-- Project Card 2 -->
-        <div class="project-card" data-project="proj2">
-          <div class="card-icon">
-            <i class="fas fa-mobile-alt"></i>
-          </div>
-          <h3 class="card-title">Project 2</h3>
-          <p class="card-subtitle">Mobile Application</p>
-          <p class="card-text">Developing a cross-platform mobile application.</p>
-          <span class="card-tag">Group</span>
-        </div>
-
-        <!-- Project Card 3 -->
-        <div class="project-card" data-project="proj3">
-          <div class="card-icon">
-            <i class="fas fa-cloud"></i>
-          </div>
-          <h3 class="card-title">Project 3</h3>
-          <p class="card-subtitle">Cloud Computing Project</p>
-          <p class="card-text">Implementing cloud-based solutions and services.</p>
-          <span class="card-tag">Group</span>
-        </div>
-
-        <!-- Project Card 4 -->
-        <div class="project-card" data-project="proj4">
-          <div class="card-icon">
-            <i class="fas fa-brain"></i>
-          </div>
-          <h3 class="card-title">Project 4</h3>
-          <p class="card-subtitle">AI/ML Project</p>
-          <p class="card-text">Machine learning model development and deployment.</p>
-          <span class="card-tag">Group</span>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="projectModal">
-    <div class="modal-content">
-      <button class="modal-close" aria-label="Close modal">
-        <i class="fas fa-times"></i>
-      </button>
-      <div class="modal-header">
-        <div class="modal-icon">
-          <i class="fas fa-folder"></i>
-        </div>
-        <h2 class="modal-title">Project Title</h2>
-        <span class="modal-type">Homework / Project</span>
-      </div>
-      <div class="modal-body">
-        <div class="modal-section">
-          <h3><i class="fas fa-users"></i> Team Members</h3>
-          <p class="team-members">Team member list</p>
-        </div>
-        <div class="modal-section">
-          <h3><i class="fas fa-info-circle"></i> Description</h3>
-          <p class="project-description">Project description goes here.</p>
-        </div>
-        <div class="modal-section">
-          <h3><i class="fas fa-tools"></i> Technologies Used</h3>
-          <div class="tech-tags">
-            <span class="tech-tag">Technology 1</span>
-            <span class="tech-tag">Technology 2</span>
-          </div>
-        </div>
-        <div class="modal-section">
-          <h3><i class="fas fa-video"></i> Demo Video</h3>
-          <div class="video-container">
-            <iframe class="video-frame" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="modal-section">
-          <h3><i class="fas fa-file-alt"></i> Report</h3>
-          <a href="#" class="btn btn-primary report-link" target="_blank">
-            <i class="fas fa-download"></i> View Report
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-container">
-      <p class="footer-text">&copy; 2026 Farhad Aliyev. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="https://github.com/FarhadAliyev42" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <i class="fab fa-github"></i>
-          <span>GitHub</span>
-        </a>
-        <a href="https://www.codecademy.com/" target="_blank" rel="noopener noreferrer" aria-label="Codecademy">
-          <i class="fas fa-graduation-cap"></i>
-          <span>Codecademy</span>
-        </a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
-  <script src="js/projects.js"></script>
-</body>
 </html>

@@ -137,6 +137,61 @@ window.addEventListener('keydown', function(event) {
   }
 });
 
+// ── Gallery Lightbox ──
+let lightboxImages = [];
+let lightboxIndex = 0;
+
+function openLightbox(item) {
+  const grid = item.closest('.gallery-grid');
+  const items = Array.from(grid.querySelectorAll('.gallery-item'));
+  lightboxImages = items.map(el => ({
+    src: el.querySelector('img').src,
+    alt: el.querySelector('img').alt
+  }));
+  lightboxIndex = items.indexOf(item);
+  updateLightboxImage();
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = 'hidden'; // keep modal scroll locked
+}
+
+function changeLightbox(dir) {
+  lightboxIndex = (lightboxIndex + dir + lightboxImages.length) % lightboxImages.length;
+  updateLightboxImage();
+}
+
+function updateLightboxImage() {
+  document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex].src;
+  document.getElementById('lightbox-img').alt = lightboxImages[lightboxIndex].alt;
+  document.getElementById('lightbox-counter').textContent =
+    (lightboxIndex + 1) + ' / ' + lightboxImages.length;
+}
+
+function galleryItemError(img) {
+  const item = img.closest('.gallery-item');
+  item.style.display = 'none';
+  const grid = item.closest('.gallery-grid');
+  const visible = grid.querySelectorAll('.gallery-item:not([style*="none"])').length;
+  if (visible === 0 && !grid.querySelector('.gallery-empty')) {
+    const msg = document.createElement('p');
+    msg.className = 'gallery-empty';
+    msg.textContent = 'No photos added yet. Drop images into the matching images/project folder.';
+    grid.appendChild(msg);
+  }
+}
+
+window.addEventListener('keydown', function(e) {
+  const lb = document.getElementById('lightbox');
+  if (!lb || !lb.classList.contains('active')) return;
+  if (e.key === 'ArrowLeft') changeLightbox(-1);
+  if (e.key === 'ArrowRight') changeLightbox(1);
+  if (e.key === 'Escape') { closeLightbox(); e.stopImmediatePropagation(); }
+});
+
 // Patch all close triggers to use animation
 window.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.modal-close').forEach(function(btn) {
