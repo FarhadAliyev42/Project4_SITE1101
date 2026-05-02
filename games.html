@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Games - Farhad Aliyev</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .games-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+
+    .game-card {
+      background: var(--color-surface);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--color-accent);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+    }
+
+    .game-card:hover,
+    .game-card.active {
+      border-color: var(--color-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(108, 99, 255, 0.2);
+    }
+
+    .game-card.active::before,
+    .game-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .game-card-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(108, 99, 255, 0.12);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .game-card.active .game-card-icon {
+      background: rgba(108, 99, 255, 0.22);
+    }
+
+    .game-card-icon i {
+      font-size: 1.5rem;
+      color: var(--color-accent);
+    }
+
+    .game-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 6px;
+    }
+
+    .game-card p {
+      font-size: 0.82rem;
+      color: var(--color-text-muted);
+    }
+
+    /* Game area */
+    #game-area {
+      display: flex;
+      justify-content: center;
+    }
+
+    .game-wrapper {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .game-stats {
+      display: flex;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .game-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .game-stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--color-accent);
+      line-height: 1;
+    }
+
+    .game-stat-label {
+      font-size: 0.68rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    canvas {
+      border-radius: 8px;
+      display: block;
+      border: 1px solid var(--color-border);
+    }
+
+    .game-controls {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .game-controls kbd {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 0.78rem;
+      color: var(--color-text);
+      font-family: inherit;
+    }
+
+    /* 2048 board */
+    #board-2048 {
+      background: #13131c;
+      border-radius: 10px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: repeat(4, 90px);
+      grid-template-rows: repeat(4, 90px);
+      gap: 8px;
+      border: 1px solid var(--color-border);
+    }
+
+    .tile-2048 {
+      width: 90px;
+      height: 90px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: var(--font-sans);
+      animation: tileAppear 0.12s ease;
+    }
+
+    @keyframes tileAppear {
+      from { transform: scale(0.75); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .t0    { background: rgba(255,255,255,0.04); }
+    .t2    { background: #eee4da; color: #776e65; }
+    .t4    { background: #ede0c8; color: #776e65; }
+    .t8    { background: #f2b179; color: #fff; }
+    .t16   { background: #f59563; color: #fff; }
+    .t32   { background: #f67c5f; color: #fff; }
+    .t64   { background: #f65e3b; color: #fff; }
+    .t128  { background: #edcf72; color: #fff; font-size: 1.3rem; }
+    .t256  { background: #edcc61; color: #fff; font-size: 1.3rem; }
+    .t512  { background: #edc850; color: #fff; font-size: 1.3rem; }
+    .t1024 { background: #edc53f; color: #fff; font-size: 1.05rem; }
+    .t2048 { background: #6c63ff; color: #fff; font-size: 1.05rem;
+             box-shadow: 0 0 24px rgba(108,99,255,0.6); }
+
+    @media (max-width: 640px) {
+      .games-selector { grid-template-columns: 1fr; }
+
+      #board-2048 {
+        grid-template-columns: repeat(4, 68px);
+        grid-template-rows: repeat(4, 68px);
+      }
+      .tile-2048 { width: 68px; height: 68px; font-size: 1.15rem; }
+      .t128, .t256, .t512 { font-size: 0.95rem; }
+      .t1024, .t2048 { font-size: 0.85rem; }
+    }
+
+    @media (max-width: 520px) {
+      canvas { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">Portfolio</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="games.html" class="active">Games</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <h1 class="page-title">Games</h1>
+      <p class="page-subtitle">Pick a game and start playing</p>
+    </div>
+  </section>
+
+  <!-- Games -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Selector -->
+      <div class="games-selector">
+        <div class="game-card active" id="card-snake" onclick="selectGame('snake')">
+          <div class="game-card-icon"><i class="fas fa-gamepad"></i></div>
+          <h3>Snake</h3>
+          <p>Eat food, grow longer, don't crash</p>
+        </div>
+        <div class="game-card" id="card-2048" onclick="selectGame('2048')">
+          <div class="game-card-icon"><i class="fas fa-border-all"></i></div>
+          <h3>2048</h3>
+          <p>Slide and merge tiles to reach 2048</p>
+        </div>
+        <div class="game-card" id="card-breakout" onclick="selectGame('breakout')">
+          <div class="game-card-icon"><i class="fas fa-bullseye"></i></div>
+          <h3>Breakout</h3>
+          <p>Smash all the bricks with the ball</p>
+        </div>
+      </div>
+
+      <!-- Active game renders here -->
+      <div id="game-area"></div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Farhad Aliyev. All rights reserved.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+  // ─── Game Manager ───────────────────────────────────────────
+  let currentGame = null;
+
+  function selectGame(name) {
+    document.querySelectorAll('.game-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('card-' + name).classList.add('active');
+    if (currentGame && currentGame.stop) currentGame.stop();
+    const area = document.getElementById('game-area');
+    area.innerHTML = '';
+    if      (name === 'snake')    currentGame = startSnake(area);
+    else if (name === '2048')     currentGame = start2048(area);
+    else if (name === 'breakout') currentGame = startBreakout(area);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => selectGame('snake'));
+
+
+  // ─── GAME 1: SNAKE ──────────────────────────────────────────
+  function startSnake(container) {
+    const CELL = 20, COLS = 20, ROWS = 20, W = 400, H = 400;
+
+    container.innerHTML = `
+      <div class="game-wrapper">
+        <div class="game-stats">
+          <div class="game-stat">
+            <span class="game-stat-value" id="sn-score">0</span>
+            <span class="game-stat-label">Score</span>
+          </div>
+          <div class="game-stat">
+            <span class="game-stat-value" id="sn-best">0</span>
+            <span class="game-stat-label">Best</span>
+          </div>
+        </div>
+        <canvas id="sn-canvas" width="${W}" height="${H}"></canvas>
+        <p class="game-controls">
+          <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> to move &nbsp;|&nbsp;
+          <kbd>Space</kbd> to start / pause
+        </p>
+        <button class="btn btn-secondary" id="sn-restart" style="padding:9px 28px;">Restart</button>
+      </div>`;
+
+    const canvas = document.getElementById('sn-canvas');
+    const ctx    = canvas.getContext('2d');
+    const scoreEl = document.getElementById('sn-score');
+    const bestEl  = document.getElementById('sn-best');
+
+    let best = parseInt(localStorage.getItem('snakeBest') || '0');
+    bestEl.textContent = best;
+
+    let snake, dir, nextDir, food, score, gameOver, paused, loop;
+
+    function init() {
+      snake    = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+      dir      = {x:1, y:0};
+      nextDir  = {x:1, y:0};
+      food     = spawnFood();
+      score    = 0; gameOver = false; paused = false;
+      scoreEl.textContent = 0;
+    }
+
+    function spawnFood() {
+      let p;
+      do { p = {x:Math.floor(Math.random()*COLS), y:Math.floor(Math.random()*ROWS)}; }
+      while (snake.some(s => s.x===p.x && s.y===p.y));
+      return p;
+    }
+
+    function step() {
+      if (gameOver || paused) return;
+      dir = nextDir;
+      const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+      if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS ||
+          snake.some(s => s.x===head.x && s.y===head.y)) {
+        die(); return;
+      }
+      snake.unshift(head);
+      if (head.x===food.x && head.y===food.y) {
+        score++;
+        scoreEl.textContent = score;
+        if (score > best) { best = score; bestEl.textContent = best; localStorage.setItem('snakeBest', best); }
+        food = spawnFood();
+      } else {
+        snake.pop();
+      }
+      draw();
+    }
+
+    function die() {
+      gameOver = true;
+      draw();
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 26px Segoe UI';
+      ctx.fillText('Game Over', W/2, H/2 - 16);
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.font = '14px Segoe UI';
+      ctx.fillText('Score: ' + score + '  |  Press Space to retry', W/2, H/2 + 14);
+    }
+
+    function draw() {
+      ctx.fillStyle = '#0f0f13';
+      ctx.fillRect(0, 0, W, H);
+
+      // subtle grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+      ctx.lineWidth = 0.5;
+      for (let i=0; i<=COLS; i++) {
+        ctx.beginPath(); ctx.moveTo(i*CELL, 0); ctx.lineTo(i*CELL, H); ctx.stroke();
+      }
+      for (let i=0; i<=ROWS; i++) {
+        ctx.beginPath(); ctx.moveTo(0, i*CELL); ctx.lineTo(W, i*CELL); ctx.stroke();
+      }
+
+      // food (glowing apple)
+      ctx.shadowColor = '#ff4757';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = '#ff4757';
+      ctx.beginPath();
+      ctx.arc(food.x*CELL+CELL/2, food.y*CELL+CELL/2, CELL/2-3, 0, Math.PI*2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // snake body
+      snake.forEach((seg, i) => {
+        const ratio = i / snake.length;
+        if (i === 0) {
+          ctx.shadowColor = '#6c63ff';
+          ctx.shadowBlur = 8;
+          ctx.fillStyle = '#6c63ff';
+        } else {
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = `hsl(248, 60%, ${58 - ratio*22}%)`;
+        }
+        ctx.beginPath();
+        ctx.roundRect(seg.x*CELL+1, seg.y*CELL+1, CELL-2, CELL-2, i===0 ? 6 : 4);
+        ctx.fill();
+      });
+      ctx.shadowBlur = 0;
+
+      // eyes on head
+      const h = snake[0];
+      const cx = h.x*CELL+CELL/2, cy = h.y*CELL+CELL/2;
+      ctx.fillStyle = '#fff';
+      const ex = cx + dir.y*4, ey = cy - dir.x*4;
+      ctx.beginPath(); ctx.arc(ex + dir.x*3, ey + dir.y*3, 2.2, 0, Math.PI*2); ctx.fill();
+    }
+
+    function drawWelcome() {
+      ctx.fillStyle = '#0f0f13';
+      ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#6c63ff';
+      ctx.font = 'bold 28px Segoe UI';
+      ctx.fillText('Snake', W/2, H/2 - 22);
+      ctx.fillStyle = 'rgba(255,255,255,0.45)';
+      ctx.font = '15px Segoe UI';
+      ctx.fillText('Press Space to start', W/2, H/2 + 12);
+    }
+
+    init();
+    drawWelcome();
+
+    function onKey(e) {
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();
+      if (e.code === 'Space') {
+        if (gameOver) { clearInterval(loop); loop = null; init(); drawWelcome(); return; }
+        if (!loop)  { loop = setInterval(step, 115); paused = false; }
+        else        { paused = !paused; }
+        return;
+      }
+      if (!loop || paused) return;
+      const map = { ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0} };
+      const d = map[e.code];
+      if (d && !(d.x === -dir.x && d.y === -dir.y)) nextDir = d;
+    }
+
+    document.addEventListener('keydown', onKey);
+    document.getElementById('sn-restart').addEventListener('click', () => {
+      clearInterval(loop); loop = null; init(); drawWelcome();
+    });
+
+    return { stop() { clearInterval(loop); document.removeEventListener('keydown', onKey); } };
+  }
+
+
+  // ─── GAME 2: 2048 ───────────────────────────────────────────
+  function start2048(container) {
+    container.innerHTML = `
+      <div class="game-wrapper">
+        <div class="game-stats">
+          <div class="game-stat">
+            <span class="game-stat-value" id="g2-score">0</span>
+            <span class="game-stat-label">Score</span>
+          </div>
+          <div class="game-stat">
+            <span class="game-stat-value" id="g2-best">0</span>
+            <span class="game-stat-label">Best</span>
+          </div>
+        </div>
+        <div id="board-2048"></div>
+        <p class="game-controls">
+          <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> to slide &nbsp;|&nbsp; swipe on mobile
+        </p>
+        <button class="btn btn-secondary" id="g2-restart" style="padding:9px 28px;">New Game</button>
+      </div>`;
+
+    let grid, score;
+    let best = parseInt(localStorage.getItem('best2048') || '0');
+    document.getElementById('g2-best').textContent = best;
+
+    function newGame() {
+      grid  = Array.from({length:4}, () => Array(4).fill(0));
+      score = 0;
+      document.getElementById('g2-score').textContent = 0;
+      addTile(); addTile();
+      render();
+    }
+
+    function addTile() {
+      const empty = [];
+      for (let r=0;r<4;r++) for (let c=0;c<4;c++) if (!grid[r][c]) empty.push([r,c]);
+      if (!empty.length) return;
+      const [r,c] = empty[Math.floor(Math.random()*empty.length)];
+      grid[r][c] = Math.random() < 0.9 ? 2 : 4;
+    }
+
+    function render() {
+      const board = document.getElementById('board-2048');
+      if (!board) return;
+      board.innerHTML = '';
+      for (let r=0;r<4;r++) for (let c=0;c<4;c++) {
+        const v = grid[r][c];
+        const d = document.createElement('div');
+        d.className = 'tile-2048 t' + v;
+        d.textContent = v || '';
+        board.appendChild(d);
+      }
+    }
+
+    function slide(row) {
+      let arr = row.filter(v => v);
+      for (let i=0;i<arr.length-1;i++) {
+        if (arr[i]===arr[i+1]) {
+          arr[i] *= 2;
+          score += arr[i];
+          arr.splice(i+1,1);
+        }
+      }
+      while (arr.length < 4) arr.push(0);
+      return arr;
+    }
+
+    function move(dir) {
+      const prev = JSON.stringify(grid);
+      if (dir==='left')  for(let r=0;r<4;r++) grid[r] = slide(grid[r]);
+      if (dir==='right') for(let r=0;r<4;r++) grid[r] = slide([...grid[r]].reverse()).reverse();
+      if (dir==='up')    for(let c=0;c<4;c++) { let col=grid.map(r=>r[c]); col=slide(col); col.forEach((v,r)=>grid[r][c]=v); }
+      if (dir==='down')  for(let c=0;c<4;c++) { let col=grid.map(r=>r[c]).reverse(); col=slide(col).reverse(); col.forEach((v,r)=>grid[r][c]=v); }
+      if (JSON.stringify(grid)===prev) return;
+      addTile();
+      document.getElementById('g2-score').textContent = score;
+      if (score > best) { best = score; document.getElementById('g2-best').textContent = best; localStorage.setItem('best2048', best); }
+      render();
+      if (grid.some(r=>r.some(v=>v===2048))) { setTimeout(()=>alert('You reached 2048! Great job!'), 80); return; }
+      if (!canMove()) setTimeout(()=>alert('No more moves! Score: ' + score), 80);
+    }
+
+    function canMove() {
+      for(let r=0;r<4;r++) for(let c=0;c<4;c++) {
+        if (!grid[r][c]) return true;
+        if (c<3 && grid[r][c]===grid[r][c+1]) return true;
+        if (r<3 && grid[r][c]===grid[r+1][c]) return true;
+      }
+      return false;
+    }
+
+    function onKey(e) {
+      const map = {ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'};
+      if (map[e.code]) { e.preventDefault(); move(map[e.code]); }
+    }
+
+    // Touch swipe
+    let tx, ty;
+    const boardEl = document.getElementById('board-2048');
+    boardEl.addEventListener('touchstart', e => { tx=e.touches[0].clientX; ty=e.touches[0].clientY; }, {passive:true});
+    boardEl.addEventListener('touchend', e => {
+      const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+      if (Math.abs(dx)>Math.abs(dy)) move(dx>0?'right':'left');
+      else move(dy>0?'down':'up');
+    }, {passive:true});
+
+    document.addEventListener('keydown', onKey);
+    document.getElementById('g2-restart').addEventListener('click', newGame);
+    newGame();
+
+    return { stop() { document.removeEventListener('keydown', onKey); } };
+  }
+
+
+  // ─── GAME 3: BREAKOUT ───────────────────────────────────────
+  function startBreakout(container) {
+    const W = 480, H = 340;
+
+    container.innerHTML = `
+      <div class="game-wrapper">
+        <div class="game-stats">
+          <div class="game-stat">
+            <span class="game-stat-value" id="bo-score">0</span>
+            <span class="game-stat-label">Score</span>
+          </div>
+          <div class="game-stat">
+            <span class="game-stat-value" id="bo-lives">3</span>
+            <span class="game-stat-label">Lives</span>
+          </div>
+          <div class="game-stat">
+            <span class="game-stat-value" id="bo-level">1</span>
+            <span class="game-stat-label">Level</span>
+          </div>
+        </div>
+        <canvas id="bo-canvas" width="${W}" height="${H}" style="cursor:none; max-width:100%;"></canvas>
+        <p class="game-controls">
+          Move mouse or <kbd>←</kbd> <kbd>→</kbd> to move paddle &nbsp;|&nbsp;
+          <kbd>Space</kbd> / click to launch
+        </p>
+        <button class="btn btn-secondary" id="bo-restart" style="padding:9px 28px;">Restart</button>
+      </div>`;
+
+    const canvas = document.getElementById('bo-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    const COLS = 8, ROWS = 5;
+    const BW = 52, BH = 18, BPAD = 4, BOX = 14, BOY = 36;
+    const PW = 80, PH = 10, BR = 7;
+    const COLORS = ['#f65e3b','#f59563','#edcf72','#6c63ff','#48dbfb'];
+
+    let paddle, ball, bricks, score, lives, level, launched, keys, raf;
+
+    function init() {
+      paddle   = { x: W/2-PW/2, y: H-30 };
+      ball     = { x: W/2, y: paddle.y-BR, vx:0, vy:0 };
+      launched = false;
+      score=0; lives=3; level=1; keys={};
+      hud(); makeBricks();
+    }
+
+    function hud() {
+      document.getElementById('bo-score').textContent = score;
+      document.getElementById('bo-lives').textContent = lives;
+      document.getElementById('bo-level').textContent = level;
+    }
+
+    function makeBricks() {
+      bricks = [];
+      for (let r=0;r<ROWS;r++) for (let c=0;c<COLS;c++) {
+        bricks.push({ x: BOX + c*(BW+BPAD), y: BOY + r*(BH+BPAD), alive:true, color:COLORS[r] });
+      }
+    }
+
+    function launch() {
+      if (launched) return;
+      launched = true;
+      const spd = 3.8 + level * 0.35;
+      ball.vx = (Math.random()*1.6 - 0.8) * spd;
+      ball.vy = -spd;
+    }
+
+    function gameLoop() {
+      // Paddle input
+      if (keys['ArrowLeft'])  paddle.x = Math.max(0, paddle.x - 6);
+      if (keys['ArrowRight']) paddle.x = Math.min(W-PW, paddle.x + 6);
+
+      if (!launched) {
+        ball.x = paddle.x + PW/2;
+        ball.y = paddle.y - BR;
+      } else {
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        // Wall bounces
+        if (ball.x-BR < 0)  { ball.x=BR;   ball.vx=Math.abs(ball.vx); }
+        if (ball.x+BR > W)  { ball.x=W-BR; ball.vx=-Math.abs(ball.vx); }
+        if (ball.y-BR < 0)  { ball.y=BR;   ball.vy=Math.abs(ball.vy); }
+
+        // Lost ball
+        if (ball.y > H+20) {
+          lives--; hud();
+          if (lives <= 0) { draw(); drawOverlay('Game Over', 'Score: '+score); return; }
+          launched=false; ball.x=paddle.x+PW/2; ball.y=paddle.y-BR;
+        }
+
+        // Paddle hit
+        if (ball.vy>0 && ball.y+BR>=paddle.y && ball.y+BR<=paddle.y+PH &&
+            ball.x>=paddle.x && ball.x<=paddle.x+PW) {
+          const angle = ((ball.x-(paddle.x+PW/2))/(PW/2)) * 1.2;
+          const spd = Math.hypot(ball.vx, ball.vy);
+          ball.vx = Math.sin(angle) * spd;
+          ball.vy = -Math.abs(ball.vy);
+        }
+
+        // Brick hits
+        for (const b of bricks) {
+          if (!b.alive) continue;
+          if (ball.x+BR>b.x && ball.x-BR<b.x+BW && ball.y+BR>b.y && ball.y-BR<b.y+BH) {
+            b.alive = false; score += 10; hud();
+            const oL=ball.x+BR-b.x, oR=b.x+BW-(ball.x-BR);
+            const oT=ball.y+BR-b.y, oB=b.y+BH-(ball.y-BR);
+            if (Math.min(oL,oR) < Math.min(oT,oB)) ball.vx=-ball.vx;
+            else ball.vy=-ball.vy;
+            break;
+          }
+        }
+
+        // Level cleared
+        if (bricks.every(b=>!b.alive)) {
+          level++; hud(); makeBricks(); launched=false;
+          ball.x=paddle.x+PW/2; ball.y=paddle.y-BR;
+        }
+      }
+
+      draw();
+      raf = requestAnimationFrame(gameLoop);
+    }
+
+    function draw() {
+      ctx.fillStyle = '#0f0f13';
+      ctx.fillRect(0, 0, W, H);
+
+      // Bricks
+      bricks.forEach(b => {
+        if (!b.alive) return;
+        ctx.fillStyle = b.color;
+        ctx.beginPath(); ctx.roundRect(b.x, b.y, BW, BH, 4); ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        ctx.fillRect(b.x+2, b.y+2, BW-4, 4);
+      });
+
+      // Paddle
+      const pg = ctx.createLinearGradient(paddle.x, 0, paddle.x+PW, 0);
+      pg.addColorStop(0, '#857dff'); pg.addColorStop(1, '#6c63ff');
+      ctx.fillStyle = pg;
+      ctx.shadowColor='#6c63ff'; ctx.shadowBlur=10;
+      ctx.beginPath(); ctx.roundRect(paddle.x, paddle.y, PW, PH, 5); ctx.fill();
+      ctx.shadowBlur=0;
+
+      // Ball
+      const bg = ctx.createRadialGradient(ball.x-2, ball.y-2, 1, ball.x, ball.y, BR);
+      bg.addColorStop(0, '#fff'); bg.addColorStop(1, '#a89dff');
+      ctx.fillStyle = bg;
+      ctx.beginPath(); ctx.arc(ball.x, ball.y, BR, 0, Math.PI*2); ctx.fill();
+
+      if (!launched) {
+        ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.38)';
+        ctx.font='13px Segoe UI';
+        ctx.fillText('Press Space or click to launch', W/2, H/2+10);
+      }
+    }
+
+    function drawOverlay(title, sub) {
+      ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(0,0,W,H);
+      ctx.textAlign='center';
+      ctx.fillStyle='#fff'; ctx.font='bold 26px Segoe UI';
+      ctx.fillText(title, W/2, H/2-16);
+      ctx.fillStyle='rgba(255,255,255,0.5)'; ctx.font='14px Segoe UI';
+      ctx.fillText(sub, W/2, H/2+14);
+      ctx.fillText('Press Restart to play again', W/2, H/2+40);
+    }
+
+    function onKey(e) {
+      if (['ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();
+      keys[e.code] = (e.type==='keydown');
+      if (e.type==='keydown' && e.code==='Space') launch();
+    }
+
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      paddle.x = Math.max(0, Math.min(W-PW, (e.clientX-rect.left)*scaleX - PW/2));
+    });
+    canvas.addEventListener('click', launch);
+
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('keyup',  onKey);
+    document.getElementById('bo-restart').addEventListener('click', () => {
+      cancelAnimationFrame(raf); init(); raf = requestAnimationFrame(gameLoop);
+    });
+
+    init();
+    raf = requestAnimationFrame(gameLoop);
+
+    return {
+      stop() {
+        cancelAnimationFrame(raf);
+        document.removeEventListener('keydown', onKey);
+        document.removeEventListener('keyup',   onKey);
+      }
+    };
+  }
+  </script>
+</body>
+</html>
